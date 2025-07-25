@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>video-details-form</title>
+    <style>
+        .hidden{display:none;}
+        .field{margin-top: 10px; width: 640px;}
+        label{display: block; margin-top: 15px; font-weight: bold;}
+    </style>
+</head>
+<body>
+
+    <!--input for selecting the video file to upload-->
+    <input type="file" accept="video/*" id="videoInput">
+    <!--video player that will show the selected video;hidden until a file is selected-->
+    <video id="videoPlayer" width="640" controls class="hidden"></video>
+
+    <!-- metadata input fields(description,title,category)-->
+    <div id="metaFields" class="hidden">
+        <label for="videoTitle">Title:</label>
+        <input type="text" id="videoTitle" class="field" placeholder="example: vlog,summer...">
+
+        <label for="videoCategory">Category:</label>
+        <select id="videoCategory" class="field">
+            <option value="">Choose Category</option>
+            <option value="education">Education</option>
+            <option value="sport">Sport</option>
+            <option value="entertainment">Entertainment</option>
+        </select>
+
+        <textarea id="videoDescription" class="field" placeholder="Write a description..."></textarea>
+
+    </div>
+
+    <!-- upload button-->
+    <button id="videoButton" class="field hidden">Upload</button>
+
+
+    <script>
+        // access HTML elements
+        const videoInput =document.getElementById('videoInput');
+        const videoPlayer =document.getElementById('videoPlayer');
+     
+        //to start an action when the user selects a video file
+        videoInput.addEventListener('change', function(){
+         //get the first(and only) selected file from the input
+            const file=videoInput.files[0];
+
+            //if no file selected,show alert and stop
+            if(!file){
+                alert("please choose again");
+                return;
+            }
+
+            //Create a temporary URL for the video and set it as the video player's source
+            const url = URL.createObjectURL(file);
+            videoPlayer.src=url;
+
+            //show video player and metadata fields
+            videoPlayer.classList.remove('hidden');
+            metaFields.classList.remove('hidden');
+            videoButton.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
