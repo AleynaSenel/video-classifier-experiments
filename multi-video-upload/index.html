@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>multi-video-upload</title>
+     <style>
+        body{
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .field{
+            display: block;
+            width: 100%;
+            max-width: 640px;
+            margin-top: 10px;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .video-block{
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding:15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+        }
+    </style>
+</head>
+<body>
+    <h1>Multi Video Upload</h1>
+    <input type="file" accept="video/*" id="videoInput" multiple class="field">
+    <div id="videoContainer"> </div> <!-- This is where I will add the selected videos and their input fields -->
+
+
+    <script>
+        const videoInput=document.getElementById('videoInput');
+        const videoContainer=document.getElementById('videoContainer');
+
+        videoInput.addEventListener('change',function(){
+            //turning the selected video files into an array
+            const files=Array.from(videoInput.files);
+
+            files.forEach((file)=>{
+                const videoURL=URL.createObjectURL(file); // create a video url
+
+                const block=document.createElement("div"); // create a <div> element in HTML using javascript
+                block.className="video-block"; // assign the "video-block" class for styling
+                //when the user selects multiple videos, each one gets its own separate box
+
+                const videoPlayer=document.createElement("video");
+                videoPlayer.src=videoURL;
+                videoPlayer.width=640;
+                videoPlayer.controls=true; //enable video playback controls
+
+                const title=document.createElement("input");
+                title.type="text";
+                title.placeholder="Title";
+                title.className="field";
+
+                const tags=document.createElement("input");
+                tags.type="text";
+                tags.placeholder="Tags";
+                tags.className="field";
+
+                const category=document.createElement("select");
+                category.className="field";
+
+                const options=[
+                    {value:"",text:"-Choose a Category-"},
+                    {value:"Sports",text:"Sports"},
+                    {value:"Education",text:"Education"},
+                    {value:"Vacation",text:"vacation"}
+
+                ];
+                options.forEach((optData) =>{  //create an <option> element for each item in the array
+                    const opt=document.createElement("option");
+                    opt.value=optData.value; // this is the value that gets sent when the user selects this option
+                    opt.textContent=optData.text;
+                    category.appendChild(opt);  // add the option to the <select> element
+                });
+
+                const desc=document.createElement('textarea');
+                desc.placeholder="Description...";
+                desc.className="field";
+                desc.row=2;
+
+                const deleteButton=document.createElement("delete");
+                deleteButton.textContent="delete";
+                deleteButton.className="field";
+                deleteButton.style.background="#e74c3c";
+                deleteButton.style.color="white";
+                deleteButton.onclick =() => block.remove();
+
+                block.appendChild(videoPlayer); //add the video player inside the block(the block is like a box for this video)
+                block.appendChild(title);
+                block.appendChild(tags);
+                block.appendChild(category);
+                block.appendChild(desc);
+                block.appendChild(deleteButton);
+
+                videoContainer.appendChild(block); //finally,add the whole block into the main container(like placing the box into the shelf)
+
+                videoInput.value=""; //reset input so the same file can be selected again if needed
+
+
+
+            })
+        })
+
+
+    </script>
+    
+</body>
+</html>
